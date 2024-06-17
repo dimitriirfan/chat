@@ -5,12 +5,11 @@ import (
 
 	"github.com/dimitriirfan/chat-2/modules/chat/internal/entity"
 	"github.com/dimitriirfan/chat-2/modules/chat/internal/repository"
-	"github.com/google/uuid"
 )
 
 type SessionUsecase interface {
 	IsValidParticipant(ctx context.Context, sessionID string, participant entity.Participant) bool
-	RegisterSessionConnection(ctx context.Context, sessionID string, token string, connection *entity.Connection) error
+	RegisterSessionConnection(ctx context.Context, sessionID string, participant entity.Participant, connection *entity.Connection) error
 	BroadcastMessage(ctx context.Context, sessionID string, senderConnection *entity.Connection, message entity.Message)
 }
 
@@ -28,12 +27,7 @@ func (u *SessionUc) IsValidParticipant(ctx context.Context, sessionID string, pa
 	return u.sessionsRepository.IsValidParticipant(ctx, sessionID, participant)
 }
 
-func (u *SessionUc) RegisterSessionConnection(ctx context.Context, sessionID string, token string, connection *entity.Connection) error {
-	// TODO: get participant from db
-	participant := entity.Participant{
-		ID:       uuid.NewString(),
-		Username: token,
-	}
+func (u *SessionUc) RegisterSessionConnection(ctx context.Context, sessionID string, participant entity.Participant, connection *entity.Connection) error {
 
 	connection.RegisterParticipant(participant)
 

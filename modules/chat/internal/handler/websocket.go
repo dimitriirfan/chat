@@ -26,7 +26,7 @@ func NewChatWebsocketHandler(upgrader *websocket.Upgrader, sessionUsecase usecas
 
 func (h *ChatWebsocketHandler) HandleSessionConnections(w http.ResponseWriter, r *http.Request) {
 	sessionID := mux.Vars(r)["sessionId"]
-	token := r.URL.Query().Get("token")
+	token := r.Header.Get("Authorization")
 	ctx := r.Context()
 
 	participant, err := h.userUsecase.GetParticipantFromToken(ctx, token)
@@ -50,7 +50,7 @@ func (h *ChatWebsocketHandler) HandleSessionConnections(w http.ResponseWriter, r
 	connection := entity.NewConnection(conn)
 
 	// TODO: Register client to a given session
-	err = h.sessionUsecase.RegisterSessionConnection(ctx, sessionID, token, connection)
+	err = h.sessionUsecase.RegisterSessionConnection(ctx, sessionID, participant, connection)
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		return

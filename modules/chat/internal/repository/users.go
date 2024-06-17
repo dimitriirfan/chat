@@ -7,22 +7,22 @@ import (
 	usersModuleConfig "github.com/dimitriirfan/chat-2/modules/users/config"
 )
 
-type UsersRepositoryInterface interface {
+type UsersRepository interface {
 	GetParticipantFromToken(ctx context.Context, token string) (entity.Participant, error)
 }
 
 type UsersRepo struct {
-	usersModule usersModuleConfig.UsersRepositoryInterface
+	usersModuleResource usersModuleConfig.UsersExternalResource
 }
 
-func NewUsersRepository(usersModule usersModuleConfig.UsersRepositoryInterface) *UsersRepo {
+func NewUsersRepository(usersModuleResource usersModuleConfig.UsersExternalResource) *UsersRepo {
 	return &UsersRepo{
-		usersModule: usersModule,
+		usersModuleResource: usersModuleResource,
 	}
 }
 
 func (r *UsersRepo) GetParticipantFromToken(ctx context.Context, token string) (entity.Participant, error) {
-	user, err := r.usersModule.GetUserFromToken(ctx, token)
+	user, err := r.usersModuleResource.GetUserFromToken(ctx, token)
 	if err != nil {
 		return entity.Participant{}, err
 	}

@@ -4,6 +4,7 @@ import (
 	"context"
 
 	"github.com/dimitriirfan/chat-2/modules/chat/internal/entity"
+	"github.com/dimitriirfan/chat-2/modules/chat/internal/repository"
 )
 
 type UserUsecase interface {
@@ -11,14 +12,15 @@ type UserUsecase interface {
 }
 
 type UserUc struct {
+	usersRepository repository.UsersRepository
 }
 
-func NewUserUsecase() *UserUc {
-	return &UserUc{}
+func NewUserUsecase(usersRepository repository.UsersRepository) *UserUc {
+	return &UserUc{
+		usersRepository: usersRepository,
+	}
 }
 
 func (u *UserUc) GetParticipantFromToken(ctx context.Context, token string) (entity.Participant, error) {
-	return entity.Participant{
-		Username: token,
-	}, nil
+	return u.usersRepository.GetParticipantFromToken(ctx, token)
 }

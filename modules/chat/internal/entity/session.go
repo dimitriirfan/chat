@@ -9,14 +9,14 @@ import (
 type Session struct {
 	mu           sync.Mutex
 	ID           string
-	Participants map[string]Participant
+	Participants map[int]Participant
 	Connections  map[string]*Connection
 }
 
 func NewSession() *Session {
 	return &Session{
 		ID:           uuid.NewString(),
-		Participants: make(map[string]Participant),
+		Participants: make(map[int]Participant),
 		Connections:  make(map[string]*Connection),
 	}
 }
