@@ -8,6 +8,20 @@ services:
       - "6379:6379"
     volumes:
       - redis_data:/var/lib/redis
+  mysql:
+    image: mariadb:11.5.1-ubi9-rc
+    restart: always
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_DATABASE: chat
+      MYSQL_USER: chat
+      MYSQL_PASSWORD: pass
+      MYSQL_ROOT_PASSWORD: root
+    volumes:
+      - my-db:/var/lib/mysql
 volumes:
   redis_data:
+    driver: local
+  my-db:
     driver: local

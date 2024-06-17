@@ -5,6 +5,7 @@ import (
 	"log"
 	"net/http"
 
+	"github.com/dimitriirfan/chat-2/internal/config"
 	"github.com/google/uuid"
 	"github.com/gorilla/mux"
 	"github.com/gorilla/websocket"
@@ -90,11 +91,8 @@ func (s *WebsocketServer) HandleConnections(w http.ResponseWriter, r *http.Reque
 }
 
 func main() {
-	ws := NewWebSocketServer()
 
-	r := mux.NewRouter()
-	r.HandleFunc("/chat/{sessionId}", ws.HandleConnections)
-
+	r := config.NewWebsocketRouter()
 	httpServer := http.Server{
 		Addr:    ":8080",
 		Handler: r,
